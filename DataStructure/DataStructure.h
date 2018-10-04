@@ -1,0 +1,37 @@
+//
+// Created by tomas on 18.9.30.
+//
+
+#ifndef TRAVELINGSALESMAN_DATASTRUCTURE_H
+#define TRAVELINGSALESMAN_DATASTRUCTURE_H
+
+typedef struct {
+    int cities;
+    double **distanceMatrix;
+} tsp_global;
+
+typedef struct {
+    int x;
+    int y;
+} City;
+
+typedef struct {
+    int *visited;
+    int city;
+    int step;
+    double pathLength;
+} stack_data;
+
+typedef struct stack_node stack_node;
+struct stack_node
+{
+    stack_data data;
+    stack_node* next;
+};
+
+int isEmpty(stack_node *s);
+stack_node* push(stack_node *s, stack_data data);
+stack_node* pop(stack_node *s, stack_data *data);
+void init(stack_node* s);
+
+#endif //TRAVELINGSALESMAN_DATASTRUCTURE_H
