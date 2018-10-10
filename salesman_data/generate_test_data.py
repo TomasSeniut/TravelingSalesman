@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import numpy as np
 import argparse
 import os
@@ -20,4 +22,4 @@ if args.o:
 if os.path.isdir('salesman_data'):
     out = os.path.join('salesman_data', out)
 
-np.savetxt(out, data, fmt='%d', header=f'Cities: {args.N}\nIndex, X, Y')
+np.savetxt(out, data, fmt='%4d', header=f'Cities: {args.N}\nIndex, X, Y')
