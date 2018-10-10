@@ -2,6 +2,7 @@
 // Created by tomas on 18.9.30.
 //
 
+#include <bits/types/FILE.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "../DataStructure/DataStructure.h"
