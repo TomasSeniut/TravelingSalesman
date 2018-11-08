@@ -1,2 +1,2 @@
-solution = [0, 4, 6, 9, 1, 3, 5, 7, 2, 8]
-dataFileName = "../salesman_data/tsp_10.out"
+solution = [0, 13, 17, 8, 19, 11, 3, 12, 1, 9, 2, 5, 4, 18, 10, 14, 16, 7, 6, 15]
+dataFileName = "../salesman_data/tsp_20.out"

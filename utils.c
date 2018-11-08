@@ -54,13 +54,3 @@ void InvertCopyArray(int n, int from[], int to[]) {
         to[from[i]] = i;
     }
 }
-
-int IsAllCitiesVisited(int n, int cityArray[]) {
-    for (int i = 0; i < n; ++i) {
-        if (!cityArray[i]) {
-            return 0;
-        }
-    }
-
-    return 1;
-}

@@ -4,9 +4,11 @@
 
 #include <stdio.h>
 #include <float.h>
+#include "../DataStructure/DataStructure.h"
 #include "../utils.h"
 
-double GetLowerBound(tsp_global params, int citiesVisited[], int cityToVisit);
+double GetLowerBound(tsp_global params, const int citiesVisited[]);
+int IsAllCitiesVisited(int n, const int cityArray[]);
 
 stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
     stack_node *stack = NULL;
@@ -27,11 +29,6 @@ stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
 
         for (int i = 0; i < params.cities; ++i) {
             if (problem.visited[i]) {
-                continue;
-            }
-
-            double pathEstimate = problem.pathLength + GetLowerBound(params, problem.visited, i);
-            if (bestKnown.pathLength < pathEstimate) {
                 continue;
             }
 
@@ -56,6 +53,11 @@ stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
                 continue;
             }
 
+            double pathEstimate = subproblem.pathLength + GetLowerBound(params, subproblem.visited);
+            if (bestKnown.pathLength < pathEstimate) {
+                continue;
+            }
+
             stack = push(stack, subproblem);
         }
     }
@@ -63,11 +65,11 @@ stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
     return bestKnown;
 }
 
-double GetLowerBound(tsp_global params, int citiesVisited[], int cityToVisit) {
+double GetLowerBound(tsp_global params, const int citiesVisited[]) {
     double lowerBound = 0;
 
     for (int i = 0; i < params.cities; ++i) {
-        if (citiesVisited[i] || i == cityToVisit) {
+        if (citiesVisited[i]) {
             continue;
         }
 
@@ -75,7 +77,7 @@ double GetLowerBound(tsp_global params, int citiesVisited[], int cityToVisit) {
         double secondNearestCity = DBL_MAX;
 
         for (int j = 0; j < params.cities; ++j) {
-            if (citiesVisited[j] || j == cityToVisit || i == j) {
+            if (citiesVisited[j] || i == j) {
                 continue;
             }
 
@@ -102,4 +104,14 @@ double GetLowerBound(tsp_global params, int citiesVisited[], int cityToVisit) {
     }
 
     return lowerBound / 2 ;
+}
+
+int IsAllCitiesVisited(int n, const int cityArray[]) {
+    for (int i = 0; i < n; ++i) {
+        if (!cityArray[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
 }

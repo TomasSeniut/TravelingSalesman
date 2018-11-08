@@ -12,7 +12,10 @@ set(SOURCE_FILES
         IO/IO.h
         IO/IO.c
         utils.c
-        utils.h Algorithms/heuristics.c Algorithms/algorithms.h Algorithms/simpleBranchAndBound.c)
+        utils.h
+        Algorithms/heuristics.c
+        Algorithms/algorithms.h
+        Algorithms/simpleBranchAndBound.c)
 
 add_executable(TravelingSalesman ${SOURCE_FILES})
 

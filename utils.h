@@ -13,6 +13,5 @@ void InitializeSimpleArray(int n, int array[]);
 void InitializeAndCopyArray(int n, int *from, int **to);
 void CopyArray(int n, int from[], int to[]);
 void InvertCopyArray(int n, int from[], int to[]);
-int IsAllCitiesVisited(int n, int cityArray[]);
 
 #endif //TRAVELINGSALESMAN_UTILS_H
