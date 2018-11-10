@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <float.h>
+#include <malloc.h>
 #include "../DataStructure/DataStructure.h"
 #include "../utils.h"
 
@@ -60,6 +61,8 @@ stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
 
             stack = push(stack, subproblem);
         }
+
+        free(problem.visited);
     }
 
     return bestKnown;

@@ -74,5 +74,3 @@ void WriteResultToPythonFile(int n, int visitedCities[], char *dataFileName) {
 
     fprintf(resultsFile, "dataFileName = \"%s\"", dataFileName);
 }
-
-

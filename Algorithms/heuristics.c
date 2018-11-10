@@ -5,12 +5,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
+#include "../DataStructure/DataStructure.h"
 #include "../utils.h"
 
 typedef struct {
     int city;
     double distance;
 } neighbour;
+
+int IsAllCitiesVisited(int n, const int cityArray[]);
 
 neighbour FindNearestNeighbour(int currentCity, tsp_global params, int *visitedCities);
 
@@ -59,4 +62,14 @@ neighbour FindNearestNeighbour(int currentCity, tsp_global params, int *visitedC
     }
 
     return nearest;
+}
+
+int IsAllCitiesVisited(int n, const int cityArray[]) {
+    for (int i = 0; i < n; ++i) {
+        if (!cityArray[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
