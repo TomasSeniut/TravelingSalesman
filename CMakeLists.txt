@@ -15,7 +15,7 @@ set(SOURCE_FILES
         utils.h
         Algorithms/heuristics.c
         Algorithms/algorithms.h
-        Algorithms/simpleBranchAndBound.c)
+        Algorithms/simpleBranchAndBound.c DataStructure/ParallelStack.c Algorithms/parallelBrachAndBound.c DataStructure/parallelStack.h)
 
 add_executable(TravelingSalesman ${SOURCE_FILES})
 
