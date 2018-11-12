@@ -12,6 +12,6 @@ void pushParallel(stack_data data);
 int popParallelAndFlagWorking(stack_data *data);
 void initStackParallel();
 int isWorkingFlagged();
-void unflagWorking();
+void destroyStack();
 
 #endif //TRAVELINGSALESMAN_PARALLELSTACK_H

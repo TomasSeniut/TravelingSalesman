@@ -6,29 +6,32 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <stdio.h>
+#include <zconf.h>
 #include "DataStructure.h"
 
 static stack_node* head;
 
 static omp_lock_t lock;
-//static omp_lock_t* workFlags;
-//static int numberOfThreads;
+static int numberOfThreads;
+
+static int* workFlags;
+
 
 void initStackParallel() {
     head = NULL;
 
-//    numberOfThreads = omp_get_num_threads();
-//    workFlags = (omp_lock_t*)malloc(sizeof(omp_lock_t) * numberOfThreads);
-//    for (int i = 0; i < numberOfThreads; ++i) {
-//        omp_init_lock(&workFlags[i]);
-//    }
+    numberOfThreads = omp_get_num_threads();
+
+    workFlags = (int*)malloc(sizeof(int) * numberOfThreads);
+    for (int i = 0; i < numberOfThreads; ++i) {
+        workFlags[i] = 0;
+    }
 
     omp_init_lock(&lock);
 }
 
 void pushParallel(stack_data data) {
     omp_set_lock(&lock);
-
 
     stack_node *tmp = (stack_node *) malloc(sizeof(stack_node));
     if (tmp == NULL) {
@@ -44,10 +47,10 @@ void pushParallel(stack_data data) {
 }
 
 int popParallelAndFlagWorking(stack_data *element) {
-
     omp_set_lock(&lock);
 
     if (head == NULL) {
+        workFlags[omp_get_thread_num()] = 0;
         omp_unset_lock(&lock);
         return 0;
     }
@@ -55,9 +58,13 @@ int popParallelAndFlagWorking(stack_data *element) {
     stack_node *tmp = head;
     *element = head->data;
     head = head->next;
+
     free(tmp);
 
+    workFlags[omp_get_thread_num()] = 1;
+
     omp_unset_lock(&lock);
+
     return 1;
 }
 
@@ -66,9 +73,19 @@ int isEmptyParallel() {
 }
 
 int isWorkingFlagged() {
+    usleep(1000);
+
+    for (int i = 0; i < numberOfThreads; ++i) {
+        if (workFlags[i]) {
+            return 1;
+        }
+    }
+
     return 0;
 }
 
-void unflagWorking() {
-
+void destroyStack()
+{
+    omp_destroy_lock(&lock);
+    free(workFlags);
 }

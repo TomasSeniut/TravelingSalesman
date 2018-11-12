@@ -2,10 +2,6 @@
 // Created by tomas on 18.11.10.
 //
 
-//
-// Created by tomas on 18.10.4.
-//
-
 #include <stdio.h>
 #include <float.h>
 #include <malloc.h>
@@ -30,12 +26,13 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
     pushParallel(initialProblem);
 
-    #pragma omp parallel
+#pragma omp parallel
     {
-        while (!isEmptyParallel() || isWorkingFlagged()) {
+        while (!isEmptyParallel() || isWorkingFlagged() || !isEmptyParallel()) {
 
             stack_data problem;
-            if (!popParallelAndFlagWorking(&problem)) {
+            int success = popParallelAndFlagWorking(&problem);
+            if (!success) {
                 continue;
             }
 
@@ -56,12 +53,14 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
                 if (IsAllCitiesVisited(params.cities, subProblem.visited)) {
                     double pathLength = subProblem.pathLength + params.distanceMatrix[subProblem.city][0];
 
-                    #pragma omp critical
-                    {
-                        if (bestKnown.pathLength >= pathLength) {
-                            printf("Better solution found: %f\n", pathLength);
-                            bestKnown.pathLength = pathLength;
-                            CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+                    if (bestKnown.pathLength >= pathLength) {
+                        #pragma omp critical
+                        {
+                            if (bestKnown.pathLength >= pathLength) {
+                                //printf("Better solution found: %f\n", pathLength);
+                                bestKnown.pathLength = pathLength;
+                                CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+                            }
                         }
                     }
 
@@ -75,13 +74,12 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
                 pushParallel(subProblem);
             }
-
-            free(problem.visited);
-            unflagWorking();
         }
 
         printf("Thread: %d finished working\n", omp_get_thread_num());
     }
+
+    destroyStack();
 
     return bestKnown;
 }

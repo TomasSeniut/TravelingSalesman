@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from solution import *
 import numpy as np
 import matplotlib.pyplot as plt
