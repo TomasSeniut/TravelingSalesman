@@ -9,20 +9,19 @@
 #include <zconf.h>
 #include "DataStructure.h"
 
-static stack_node* head;
+static stack_node *head;
 
 static omp_lock_t lock;
 static int numberOfThreads;
 
-static int* workFlags;
-
+static volatile int *workFlags;
 
 void initStackParallel() {
     head = NULL;
 
     numberOfThreads = omp_get_num_threads();
 
-    workFlags = (int*)malloc(sizeof(int) * numberOfThreads);
+    workFlags = (int *) malloc(sizeof(int) * numberOfThreads);
     for (int i = 0; i < numberOfThreads; ++i) {
         workFlags[i] = 0;
     }
@@ -46,11 +45,12 @@ void pushParallel(stack_data data) {
     omp_unset_lock(&lock);
 }
 
-int popParallelAndFlagWorking(stack_data *element) {
+int popParallel(stack_data *element) {
     omp_set_lock(&lock);
 
     if (head == NULL) {
         workFlags[omp_get_thread_num()] = 0;
+
         omp_unset_lock(&lock);
         return 0;
     }
@@ -61,20 +61,25 @@ int popParallelAndFlagWorking(stack_data *element) {
 
     free(tmp);
 
-    workFlags[omp_get_thread_num()] = 1;
-
     omp_unset_lock(&lock);
 
     return 1;
 }
 
 int isEmptyParallel() {
-    return head == NULL ? 1 : 0;
+    omp_set_lock(&lock);
+
+    int isEmpty = head == NULL ? 1 : 0;
+    if (!isEmpty) {
+        workFlags[omp_get_thread_num()] = 1;
+    }
+
+    omp_unset_lock(&lock);
+
+    return isEmpty;
 }
 
 int isWorkingFlagged() {
-    usleep(1000);
-
     for (int i = 0; i < numberOfThreads; ++i) {
         if (workFlags[i]) {
             return 1;
@@ -84,8 +89,7 @@ int isWorkingFlagged() {
     return 0;
 }
 
-void destroyStack()
-{
+void destroyStack() {
     omp_destroy_lock(&lock);
-    free(workFlags);
+    free((void*)workFlags);
 }

@@ -15,7 +15,6 @@ double GetLowerBound(tsp_global params, const int citiesVisited[]);
 int IsAllCitiesVisited(int n, const int cityArray[]);
 
 stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
-    initStackParallel();
 
     stack_data initialProblem;
     initialProblem.city = 0;
@@ -24,14 +23,18 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
     InitializeArray(params.cities, &initialProblem.visited);
     initialProblem.visited[initialProblem.city] = initialProblem.step + 1;
 
-    pushParallel(initialProblem);
-
-#pragma omp parallel
+    #pragma omp parallel
     {
+        #pragma omp single
+        {
+            initStackParallel();
+            pushParallel(initialProblem);
+        }
+
         while (!isEmptyParallel() || isWorkingFlagged() || !isEmptyParallel()) {
 
             stack_data problem;
-            int success = popParallelAndFlagWorking(&problem);
+            int success = popParallel(&problem);
             if (!success) {
                 continue;
             }
