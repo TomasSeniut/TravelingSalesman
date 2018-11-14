@@ -10,9 +10,9 @@
 #include "../DataStructure/DataStructure.h"
 #include "../DataStructure/parallelStack.h"
 
-double GetLowerBound(tsp_global params, const int citiesVisited[]);
+static double GetLowerBound(tsp_global params, const int citiesVisited[]);
 
-int IsAllCitiesVisited(int n, const int cityArray[]);
+static int IsAllCitiesVisited(int n, const int cityArray[]);
 
 stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
@@ -31,7 +31,7 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
             pushParallel(initialProblem);
         }
 
-        while (!isEmptyParallel() || isWorkingFlagged() || !isEmptyParallel()) {
+        while (!isEmptyParallel()) {
 
             stack_data problem;
             int success = popParallel(&problem);
@@ -87,7 +87,7 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
     return bestKnown;
 }
 
-double GetLowerBound(tsp_global params, const int citiesVisited[]) {
+static double GetLowerBound(tsp_global params, const int citiesVisited[]) {
     double lowerBound = 0;
 
     for (int i = 0; i < params.cities; ++i) {
@@ -128,7 +128,7 @@ double GetLowerBound(tsp_global params, const int citiesVisited[]) {
     return lowerBound / 2;
 }
 
-int IsAllCitiesVisited(int n, const int cityArray[]) {
+static int IsAllCitiesVisited(int n, const int cityArray[]) {
     for (int i = 0; i < n; ++i) {
         if (!cityArray[i]) {
             return 0;

@@ -16,6 +16,8 @@ static int numberOfThreads;
 
 static volatile int *workFlags;
 
+static int _isWorking();
+
 void initStackParallel() {
     head = NULL;
 
@@ -70,26 +72,27 @@ int isEmptyParallel() {
     omp_set_lock(&lock);
 
     int isEmpty = head == NULL ? 1 : 0;
-    if (!isEmpty) {
-        workFlags[omp_get_thread_num()] = 1;
+    if (isEmpty) {
+        omp_unset_lock(&lock);
+        return _isWorking();
     }
 
+    workFlags[omp_get_thread_num()] = 1;
     omp_unset_lock(&lock);
-
-    return isEmpty;
-}
-
-int isWorkingFlagged() {
-    for (int i = 0; i < numberOfThreads; ++i) {
-        if (workFlags[i]) {
-            return 1;
-        }
-    }
-
     return 0;
 }
 
 void destroyStack() {
     omp_destroy_lock(&lock);
     free((void*)workFlags);
+}
+
+static int _isWorking() {
+    for (int i = 0; i < numberOfThreads; ++i) {
+        if (workFlags[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
