@@ -4,15 +4,15 @@
 
 #include <stdio.h>
 #include <float.h>
-#include <malloc.h>
 #include <omp.h>
+#include <malloc.h>
 #include "../utils.h"
 #include "../DataStructure/DataStructure.h"
-#include "../DataStructure/parallelStack.h"
+#include "../DataStructure/ParallelStack.h"
 
 static double GetLowerBound(tsp_global params, const int citiesVisited[]);
 
-static int IsAllCitiesVisited(int n, const int cityArray[]);
+static int IsAllCitiesVisited(int n, int currentStep);
 
 stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
@@ -32,7 +32,6 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
         }
 
         while (!isEmptyParallel()) {
-
             stack_data problem;
             int success = popParallel(&problem);
             if (!success) {
@@ -47,13 +46,12 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
                 stack_data subProblem;
                 subProblem.city = i;
                 subProblem.step = problem.step + 1;
-                subProblem.pathLength =
-                        problem.pathLength + params.distanceMatrix[problem.city][subProblem.city];
+                subProblem.pathLength = problem.pathLength + params.distanceMatrix[problem.city][subProblem.city];
                 InitializeAndCopyArray(params.cities, problem.visited, &subProblem.visited);
                 subProblem.visited[subProblem.city] = problem.step + 1;
 
 
-                if (IsAllCitiesVisited(params.cities, subProblem.visited)) {
+                if (IsAllCitiesVisited(params.cities, subProblem.step)) {
                     double pathLength = subProblem.pathLength + params.distanceMatrix[subProblem.city][0];
 
                     if (bestKnown.pathLength >= pathLength) {
@@ -77,6 +75,8 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
                 pushParallel(subProblem);
             }
+
+            free(problem.visited);
         }
 
         printf("Thread: %d finished working\n", omp_get_thread_num());
@@ -128,12 +128,7 @@ static double GetLowerBound(tsp_global params, const int citiesVisited[]) {
     return lowerBound / 2;
 }
 
-static int IsAllCitiesVisited(int n, const int cityArray[]) {
-    for (int i = 0; i < n; ++i) {
-        if (!cityArray[i]) {
-            return 0;
-        }
-    }
+static int IsAllCitiesVisited(int n, int currentStep) {
+    return  n == (currentStep + 1);
 
-    return 1;
 }

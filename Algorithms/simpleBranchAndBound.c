@@ -6,10 +6,11 @@
 #include <float.h>
 #include <malloc.h>
 #include "../DataStructure/DataStructure.h"
+#include "../DataStructure/LinkedStack.h"
 #include "../utils.h"
 
 static double GetLowerBound(tsp_global params, const int citiesVisited[]);
-static int IsAllCitiesVisited(int n, const int cityArray[]);
+static int IsAllCitiesVisited(int n, int currentStep);
 
 stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
     stack_node *stack = NULL;
@@ -42,7 +43,7 @@ stack_data simpleBranchAndBound(tsp_global params, stack_data bestKnown) {
             subproblem.visited[subproblem.city] = problem.step + 1;
 
 
-            if (IsAllCitiesVisited(params.cities, subproblem.visited)) {
+            if (IsAllCitiesVisited(params.cities, subproblem.step)) {
                 double pathLength = subproblem.pathLength + params.distanceMatrix[subproblem.city][0];
 
                 if (bestKnown.pathLength >= pathLength) {
@@ -109,12 +110,6 @@ static double GetLowerBound(tsp_global params, const int citiesVisited[]) {
     return lowerBound / 2 ;
 }
 
-static int IsAllCitiesVisited(int n, const int cityArray[]) {
-    for (int i = 0; i < n; ++i) {
-        if (!cityArray[i]) {
-            return 0;
-        }
-    }
-
-    return 1;
+static int IsAllCitiesVisited(int n, int currentStep) {
+    return  n == (currentStep + 1);
 }

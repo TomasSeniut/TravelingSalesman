@@ -1,98 +1,91 @@
 //
-// Created by tomas on 18.11.10.
+// Created by tomas on 18.11.14.
 //
 
-#include <stddef.h>
 #include <stdlib.h>
 #include <omp.h>
 #include <stdio.h>
-#include <zconf.h>
 #include "DataStructure.h"
 
-static stack_node *head;
+static stack_node *_head;
 
-static omp_lock_t lock;
-static int numberOfThreads;
+static omp_lock_t _lock;
+static int _numberOfThreads;
 
-static volatile int *workFlags;
-
-static int _isWorking();
+static volatile int *_workFlags;
 
 void initStackParallel() {
-    head = NULL;
+    _head = NULL;
 
-    numberOfThreads = omp_get_num_threads();
+    _numberOfThreads = omp_get_num_threads();
 
-    workFlags = (int *) malloc(sizeof(int) * numberOfThreads);
-    for (int i = 0; i < numberOfThreads; ++i) {
-        workFlags[i] = 0;
+    _workFlags = (int *) malloc(sizeof(int) * _numberOfThreads);
+    for (int i = 0; i < _numberOfThreads; ++i) {
+        _workFlags[i] = 0;
     }
 
-    omp_init_lock(&lock);
+    omp_init_lock(&_lock);
 }
 
 void pushParallel(stack_data data) {
-    omp_set_lock(&lock);
-
     stack_node *tmp = (stack_node *) malloc(sizeof(stack_node));
     if (tmp == NULL) {
-        printf("Something wrong: 111");
-        exit(0);
+        exit(111);
     }
 
-    tmp->data = data;
-    tmp->next = head;
-    head = tmp;
+    omp_set_lock(&_lock);
 
-    omp_unset_lock(&lock);
+    tmp->data = data;
+    tmp->next = _head;
+    _head = tmp;
+
+    omp_unset_lock(&_lock);
 }
 
 int popParallel(stack_data *element) {
-    omp_set_lock(&lock);
+    omp_set_lock(&_lock);
 
-    if (head == NULL) {
-        workFlags[omp_get_thread_num()] = 0;
+    if (_head == NULL) {
+        _workFlags[omp_get_thread_num()] = 0;
 
-        omp_unset_lock(&lock);
+        omp_unset_lock(&_lock);
         return 0;
     }
 
-    stack_node *tmp = head;
-    *element = head->data;
-    head = head->next;
+    stack_node *tmp = _head;
+    *element = _head->data;
+    _head = _head->next;
 
     free(tmp);
 
-    omp_unset_lock(&lock);
+    _workFlags[omp_get_thread_num()] = 1;
+    omp_unset_lock(&_lock);
 
     return 1;
 }
 
 int isEmptyParallel() {
-    omp_set_lock(&lock);
+    omp_set_lock(&_lock);
 
-    int isEmpty = head == NULL ? 1 : 0;
+    int isEmpty = _head == NULL ? 1 : 0;
     if (isEmpty) {
-        omp_unset_lock(&lock);
-        return _isWorking();
+        for (int i = 0; i < _numberOfThreads; ++i) {
+            if (_workFlags[i]) {
+                omp_unset_lock(&_lock);
+                return 0;
+            }
+        }
+
+        omp_unset_lock(&_lock);
+        return 1;
     }
 
-    workFlags[omp_get_thread_num()] = 1;
-    omp_unset_lock(&lock);
+    _workFlags[omp_get_thread_num()] = 1;
+    omp_unset_lock(&_lock);
     return 0;
 }
 
 void destroyStack() {
-    omp_destroy_lock(&lock);
-    free((void*)workFlags);
-}
-
-static int _isWorking() {
-    for (int i = 0; i < numberOfThreads; ++i) {
-        if (workFlags[i]) {
-            return 0;
-        }
-    }
-
-    return 1;
+    omp_destroy_lock(&_lock);
+    free((void*)_workFlags);
 }
