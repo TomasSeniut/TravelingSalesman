@@ -16,10 +16,10 @@ typedef struct {
 } City;
 
 typedef struct {
-    int *visited;
     int city;
     int step;
     double pathLength;
+    int *visited;
 } stack_data;
 
 typedef struct stack_node stack_node;

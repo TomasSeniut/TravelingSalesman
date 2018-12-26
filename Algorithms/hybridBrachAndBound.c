@@ -1,20 +1,27 @@
 //
-// Created by tomas on 18.11.10.
+// Created by tomas on 18.12.13.
 //
 
 #include <stdio.h>
 #include <float.h>
 #include <omp.h>
 #include <malloc.h>
+#include <mpi.h>
+#include <stdlib.h>
 #include "../utils.h"
 #include "../DataStructure/DataStructure.h"
 #include "../DataStructure/ParallelStack.h"
+#include "../DataStructure/LinkedQueue.h"
+#include "../MPI/mpiWrapper.h"
 
 static double GetLowerBound(tsp_global params, const int citiesVisited[]);
 
 static int IsAllCitiesVisited(int n, int currentStep);
 
-stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
+stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
+
+    int size, rank;
+    MPI_Wrapper_Init(params.cities, &size, &rank);
 
     stack_data initialProblem;
     initialProblem.city = 0;
@@ -23,14 +30,53 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
     InitializeArray(params.cities, &initialProblem.visited);
     initialProblem.visited[initialProblem.city] = initialProblem.step + 1;
 
+    //split init problem
+    initQueue();
+    enQueue(initialProblem);
+
+    int initNodesPerProcess = 10;
+    while (queueSize() < initNodesPerProcess * size) {
+        stack_data problem = deQueue();
+
+        for (int i = 0; i < params.cities; ++i) {
+            if (problem.visited[i]) {
+                continue;
+            }
+
+            stack_data subProblem;
+            subProblem.city = i;
+            subProblem.step = problem.step + 1;
+            subProblem.pathLength = problem.pathLength + params.distanceMatrix[problem.city][subProblem.city];
+            InitializeAndCopyArray(params.cities, problem.visited, &subProblem.visited);
+            subProblem.visited[subProblem.city] = problem.step + 1;
+
+            enQueue(subProblem);
+        }
+    }
+
+    // create stack
     #pragma omp parallel
     {
         #pragma omp single
         {
             initStackParallel();
-            pushParallel(initialProblem);
         }
     }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // distribute
+    while (!isQueueEmpty()) {
+        int left = queueSize();
+        stack_data problem = deQueue();
+
+        int destination = left % size;
+        if (destination == rank) {
+            pushParallel(problem);
+        }
+    }
+
+    printf("I am process %d and have stack of size %d\n", rank, stackSize());
 
     #pragma omp parallel
     {
@@ -53,17 +99,25 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
                 InitializeAndCopyArray(params.cities, problem.visited, &subProblem.visited);
                 subProblem.visited[subProblem.city] = problem.step + 1;
 
-
                 if (IsAllCitiesVisited(params.cities, subProblem.step)) {
                     double pathLength = subProblem.pathLength + params.distanceMatrix[subProblem.city][0];
 
                     if (bestKnown.pathLength >= pathLength) {
                         #pragma omp critical
                         {
-                            if (bestKnown.pathLength >= pathLength) {
-                                //printf("Better solution found: %f\n", pathLength);
-                                bestKnown.pathLength = pathLength;
-                                CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+                            MPI_Wrapper_Receive_Bound(&bestKnown);
+                        }
+
+                        if (bestKnown.pathLength >= pathLength) {
+                            #pragma omp critical
+                            {
+                                if (bestKnown.pathLength >= pathLength) {
+                                    //printf("Better solution found: %f\n", pathLength);
+                                    bestKnown.pathLength = pathLength;
+                                    CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+
+                                    MPI_Wrapper_Share_Bound(bestKnown);
+                                }
                             }
                         }
                     }
@@ -81,11 +135,14 @@ stack_data parallelBranchAndBound(tsp_global params, stack_data bestKnown) {
 
             free(problem.visited);
         }
-
-        printf("Thread: %d finished working\n", omp_get_thread_num());
     }
 
     destroyStack();
+
+    MPI_Wrapper_Synchronize(&bestKnown);
+    printf("Finished work on process %d\n", rank);
+
+    MPI_Wrapper_Finalize();
 
     return bestKnown;
 }

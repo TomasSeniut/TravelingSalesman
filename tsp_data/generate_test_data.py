@@ -19,7 +19,7 @@ out = f'tsp_{args.N}.out'
 if args.o:
     out = args.o
 
-if os.path.isdir('salesman_data'):
-    out = os.path.join('salesman_data', out)
+if os.path.isdir('tsp_data'):
+    out = os.path.join('tsp_data', out)
 
 np.savetxt(out, data, fmt='%4d', header=f'Cities: {args.N}\nIndex, X, Y')

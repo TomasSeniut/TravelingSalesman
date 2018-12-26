@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     stack_data bestHeuristics = NearestNeighbourMethod(params);
 
     double start = omp_get_wtime();
-    stack_data solution = parallelBranchAndBound(params, bestHeuristics);
+    stack_data solution = hybridBranchAndBound(params, bestHeuristics);
     double duration = omp_get_wtime() - start;
 
     printf("It took %f seconds for algorithm.\n", duration);

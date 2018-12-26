@@ -17,7 +17,7 @@ stack_node* push(stack_node* head, stack_data data)
     stack_node* tmp = (stack_node*)malloc(sizeof(stack_node));
     if(tmp == NULL)
     {
-        exit(0);
+        exit(333);
     }
 
     tmp->data = data;

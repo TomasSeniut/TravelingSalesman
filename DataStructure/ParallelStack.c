@@ -14,6 +14,12 @@ static int _numberOfThreads;
 
 static volatile int *_workFlags;
 
+static int _count = 0;
+
+int stackSize() {
+    return _count;
+}
+
 void initStackParallel() {
     _head = NULL;
 
@@ -40,6 +46,8 @@ void pushParallel(stack_data data) {
     _head = tmp;
 
     omp_unset_lock(&_lock);
+
+    _count++;
 }
 
 int popParallel(stack_data *element) {
