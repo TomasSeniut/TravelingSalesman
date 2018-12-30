@@ -1,0 +1,12 @@
+.idea
+.vscode
+
+*.png
+
+__pycache__
+
+#cmake build directories
+cmake-build-*
+
+#my build directory
+debug-build
