@@ -104,11 +104,8 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
                         #pragma omp critical
                         {
                             MPI_Wrapper_Receive_Bound(&bestKnown);
-                        }
 
-                        if (bestKnown.pathLength >= pathLength) {
-                            #pragma omp critical
-                            {
+                            if (bestKnown.pathLength >= pathLength) {
                                 if (bestKnown.pathLength >= pathLength) {
                                     //printf("Better solution found: %f\n", pathLength);
                                     bestKnown.pathLength = pathLength;
