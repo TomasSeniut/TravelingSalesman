@@ -63,8 +63,6 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
         }
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
-
     // distribute
     while (!isQueueEmpty()) {
         int left = queueSize();
@@ -78,7 +76,7 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
 
     printf("I am process %d and have stack of size %d\n", rank, stackSize());
 
-    #pragma omp parallel
+    #pragma omp parallel num_threads(1)
     {
         while (!isEmptyParallel()) {
             stack_data problem;
@@ -130,6 +128,8 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
                     continue;
                 }
 
+
+                printf("~~~~~~~~~~~~~~~\n");
                 pushParallel(subProblem);
             }
 

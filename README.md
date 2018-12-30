@@ -40,4 +40,4 @@ For release build run
 
 To run build application call executable and pass file with problem data.
 
-```$ ./TravelingSalesman ../salesman_data/tsp_10.out```
+```$ ./TravelingSalesman ../tsp_data/tsp_10.out```

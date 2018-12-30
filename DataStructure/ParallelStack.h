@@ -15,3 +15,4 @@ void destroyStack();
 int stackSize();
 
 #endif //TRAVELINGSALESMAN_PARALLELSTACK_H
+

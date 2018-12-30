@@ -4,15 +4,18 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "DataStructure.h"
 
 typedef struct {
-    struct stack_node *front;
-    struct stack_node *rear;
+    stack_node *front;
+    stack_node *rear;
 } Queue;
 
 static Queue *_queue;
 static int _elementCount;
+
+int isQueueEmpty();
 
 void initQueue()
 {
@@ -28,7 +31,9 @@ void enQueue(stack_data data)
     if (tmp == NULL) {
         exit(222);
     }
+
     tmp->data = data;
+    tmp->next = NULL;
 
     if (_queue->rear == NULL)
     {
@@ -48,8 +53,9 @@ stack_data deQueue()
 
     _queue->front = _queue->front->next;
 
-    if (_queue->front == NULL)
+    if (_queue->front == NULL) {
         _queue->rear = NULL;
+    }
 
     return node;
 }
