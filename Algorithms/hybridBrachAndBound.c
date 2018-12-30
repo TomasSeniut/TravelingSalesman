@@ -129,7 +129,6 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
                 }
 
 
-                printf("~~~~~~~~~~~~~~~\n");
                 pushParallel(subProblem);
             }
 

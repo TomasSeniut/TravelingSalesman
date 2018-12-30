@@ -15,8 +15,6 @@ typedef struct {
 static Queue *_queue;
 static int _elementCount;
 
-int isQueueEmpty();
-
 void initQueue()
 {
     _queue = (Queue*)malloc(sizeof(Queue));
