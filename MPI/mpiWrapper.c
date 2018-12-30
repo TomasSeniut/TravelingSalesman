@@ -119,6 +119,7 @@ void MPI_Wrapper_Share_Bound(stack_data bound) {
 }
 
 void MPI_Wrapper_Synchronize(stack_data *bound) {
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Wrapper_Receive_Bound(bound);
     MPI_Barrier(MPI_COMM_WORLD);
 
