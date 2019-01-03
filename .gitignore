@@ -10,3 +10,6 @@ cmake-build-*
 
 #my build directory
 debug-build
+
+# just any build
+*build*

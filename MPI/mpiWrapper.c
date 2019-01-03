@@ -100,9 +100,8 @@ void MPI_Wrapper_Receive_Bound(stack_data *bound) {
         MPI_Recv(&externalBound, 1, MPI_DOUBLE, probeStatus.MPI_SOURCE, MPI_BOUND_TAG, MPI_COMM_WORLD, &status);
         if (bound->pathLength >= externalBound) {
             bound->pathLength = externalBound;
+            _boundSource = status.MPI_SOURCE;
         }
-
-        _boundSource = status.MPI_SOURCE;
 
         MPI_Wrapper_Receive_Bound(bound);
     }

@@ -106,13 +106,11 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
                             MPI_Wrapper_Receive_Bound(&bestKnown);
 
                             if (bestKnown.pathLength >= pathLength) {
-                                if (bestKnown.pathLength >= pathLength) {
-                                    //printf("Better solution found: %f\n", pathLength);
-                                    bestKnown.pathLength = pathLength;
-                                    CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+                                //printf("Better solution found: %f on %d\n", pathLength, rank);
+                                bestKnown.pathLength = pathLength;
+                                CopyArray(params.cities, subProblem.visited, bestKnown.visited);
 
-                                    MPI_Wrapper_Share_Bound(bestKnown);
-                                }
+                                MPI_Wrapper_Share_Bound(bestKnown);
                             }
                         }
                     }
