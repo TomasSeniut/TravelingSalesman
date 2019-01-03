@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     printf("It took %f seconds for algorithm.\n", duration);
 
     PrintResult(params, solution);
-    WriteResultToPythonFile(params.cities, solution.visited, dataFileName);
+    //WriteResultToPythonFile(params.cities, solution.visited, dataFileName);
 
     return 0;
 }
