@@ -34,8 +34,7 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
     initQueue();
     enQueue(initialProblem);
 
-    int initNodesPerProcess = 10;
-    while (queueSize() < initNodesPerProcess * size) {
+    while (queueSize() < omp_get_max_threads() * size) {
         stack_data problem = deQueue();
 
         for (int i = 0; i < params.cities; ++i) {
