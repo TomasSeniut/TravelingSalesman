@@ -1,0 +1,16 @@
+Provided thread support level: 2
+I am process 0 with 4 threads and have stack of size 27
+Solution on 0 with bound 4147.798735 is: 1 13 21 22 7 17 11 24 23 25 18 26 27 9 15 12 14 20 10 3 5 2 6 19 1 4 16 8 
+Finished work on process 0
+It took 166.942207 seconds for algorithm on 0.
+Length of the path found:  4147.7987
+Cities visited in this order:
+0 24 21 19 25 20 22 4 27 13 18 6 15 1 16 14 26 5 10 23 17 2 3 8 7 9 11 12 
+slurmstepd-lxibm114: error: Exceeded step memory limit at some point.
+Solution on 0 with bound 4147.798735 is: 1 13 21 22 7 17 11 24 23 25 18 26 27 9 15 12 14 20 10 3 5 2 6 19 1 4 16 8 
+Finished work on process 0
+It took 176.920536 seconds for algorithm on 0.
+Length of the path found:  4147.7987
+Cities visited in this order:
+0 24 21 19 25 20 22 4 27 13 18 6 15 1 16 14 26 5 10 23 17 2 3 8 7 9 11 12 
+slurmstepd-lxibm028: error: Exceeded step memory limit at some point.

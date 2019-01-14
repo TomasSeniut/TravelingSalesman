@@ -1,0 +1,6 @@
+Provided thread support level: 2
+I am process 0 with 4 threads and have stack of size 26
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 13927 on node lxibm028 exited on signal 9 (Killed).
+--------------------------------------------------------------------------
+slurmstepd-lxibm028: error: Exceeded step memory limit at some point.

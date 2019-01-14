@@ -1,0 +1,29 @@
+Provided thread support level: 2
+I am process 1 with 8 threads and have stack of size 13
+I am process 2 with 8 threads and have stack of size 13
+I am process 3 with 8 threads and have stack of size 12
+I am process 0 with 8 threads and have stack of size 12
+Solution on 3 with bound 4627.952997 is: 1 25 13 22 4 8 2 23 19 12 11 26 16 3 20 7 14 1 17 21 15 10 18 5 24 9 6 
+Finished work on process 3
+It took 110.879012 seconds for algorithm on 3.
+Solution on 1 with bound 4627.952997 is: 1 9 20 13 7 25 6 11 16 21 22 8 15 4 17 3 26 5 19 14 12 23 18 1 10 24 2 
+Finished work on process 1
+It took 110.879023 seconds for algorithm on 1.
+Solution on 2 with bound 4627.952997 is: 1 9 20 13 6 25 5 11 16 21 22 8 15 3 17 2 26 4 19 14 12 23 18 7 10 24 1 
+Finished work on process 2
+It took 110.879003 seconds for algorithm on 2.
+Solution on 0 with bound 4627.952997 is: 1 25 15 22 5 10 6 23 19 14 13 26 20 8 18 9 2 7 16 21 1 12 17 4 24 11 3 
+Finished work on process 0
+It took 110.878987 seconds for algorithm on 0.
+Length of the path found:  4627.9530
+Cities visited in this order:
+0 26 15 13 17 6 4 23 11 1 24 7 20 3 19 12 8 14 22 18 2 9 10 21 25 5 16 
+Length of the path found:  4627.9530
+Cities visited in this order:
+0 26 15 13 17 6 4 23 11 1 24 7 20 3 19 12 8 14 22 18 2 9 10 21 25 5 16 
+Length of the path found:  4627.9530
+Cities visited in this order:
+0 26 15 13 17 6 4 23 11 1 24 7 20 3 19 12 8 14 22 18 2 9 10 21 25 5 16 
+Length of the path found:  4627.9530
+Cities visited in this order:
+0 26 15 13 17 6 4 23 11 1 24 7 20 3 19 12 8 14 22 18 2 9 10 21 25 5 16 
