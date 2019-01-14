@@ -73,7 +73,7 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
         }
     }
 
-    printf("I am process %d and have stack of size %d\n", rank, stackSize());
+    printf("I am process %d with %d threads and have stack of size %d\n", rank, omp_get_max_threads(), stackSize());
 
     #pragma omp parallel
     {
