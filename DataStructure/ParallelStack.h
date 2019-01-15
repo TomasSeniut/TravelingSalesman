@@ -12,6 +12,5 @@ void pushParallel(stack_data data);
 int popParallel(stack_data *data);
 void initStackParallel();
 void destroyStack();
-int stackSize();
 
 #endif //TRAVELINGSALESMAN_PARALLELSTACK_H
