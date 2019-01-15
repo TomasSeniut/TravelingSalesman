@@ -49,20 +49,34 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
             InitializeAndCopyArray(params.cities, problem.visited, &subProblem.visited);
             subProblem.visited[subProblem.city] = problem.step + 1;
 
+            if (IsAllCitiesVisited(params.cities, subProblem.step)) {
+                double pathLength = subProblem.pathLength + params.distanceMatrix[subProblem.city][0];
+
+                if (bestKnown.pathLength >= pathLength) {
+                    //printf("Better solution found: %f on %d\n", pathLength, rank);
+                    bestKnown.pathLength = pathLength;
+                    CopyArray(params.cities, subProblem.visited, bestKnown.visited);
+                }
+
+                free(subProblem.visited);
+                continue;
+            }
+
+            double pathEstimate = subProblem.pathLength + GetLowerBound(params, subProblem.visited);
+            if (bestKnown.pathLength < pathEstimate) {
+                free(subProblem.visited);
+                continue;
+            }
+
+
             enQueue(subProblem);
         }
-        
+
         free(problem.visited);
     }
 
     // create stack
-    #pragma omp parallel
-    {
-        #pragma omp single
-        {
-            initStackParallel();
-        }
-    }
+    initStackParallel();
 
     // distribute
     int count = 0;
@@ -118,11 +132,13 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
                         }
                     }
 
+                    free(subProblem.visited);
                     continue;
                 }
 
                 double pathEstimate = subProblem.pathLength + GetLowerBound(params, subProblem.visited);
                 if (bestKnown.pathLength < pathEstimate) {
+                    free(subProblem.visited);
                     continue;
                 }
 
