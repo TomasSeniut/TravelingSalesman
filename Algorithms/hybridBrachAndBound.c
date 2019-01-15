@@ -51,6 +51,8 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
 
             enQueue(subProblem);
         }
+        
+        free(problem.visted);
     }
 
     // create stack
@@ -63,17 +65,19 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
     }
 
     // distribute
+    int count = 0;
     while (!isQueueEmpty()) {
         int left = queueSize();
         stack_data problem = deQueue();
 
         int destination = left % size;
         if (destination == rank) {
+            count++;
             pushParallel(problem);
         }
     }
 
-    printf("I am process %d with %d threads and have stack of size %d\n", rank, omp_get_max_threads(), stackSize());
+    printf("I am process %d with %d threads and have stack of size %d\n", rank, omp_get_max_threads(), count);
 
     #pragma omp parallel
     {
