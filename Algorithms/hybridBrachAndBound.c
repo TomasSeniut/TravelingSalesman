@@ -52,7 +52,7 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
             enQueue(subProblem);
         }
         
-        free(problem.visted);
+        free(problem.visited);
     }
 
     // create stack
