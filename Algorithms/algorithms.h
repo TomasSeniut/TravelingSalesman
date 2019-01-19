@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.10.1.
-//
-
 #ifndef TRAVELINGSALESMAN_ALGORITHMS_H
 #define TRAVELINGSALESMAN_ALGORITHMS_H
 

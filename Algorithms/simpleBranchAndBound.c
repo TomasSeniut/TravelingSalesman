@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.10.4.
-//
-
 #include <stdio.h>
 #include <float.h>
 #include <malloc.h>

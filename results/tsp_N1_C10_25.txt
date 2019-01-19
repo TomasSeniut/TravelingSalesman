@@ -1,8 +1,0 @@
-Provided thread support level: 2
-I am process 0 with 5 threads and have stack of size 24
-Solution on 0 with bound 4710.606240 is: 1 23 18 21 16 10 19 1 6 17 5 3 22 15 12 11 4 9 2 14 7 8 13 24 20 
-Finished work on process 0
-It took 7.049900 seconds for algorithm on 0.
-Length of the path found:  4710.6062
-Cities visited in this order:
-0 7 18 11 16 10 8 20 21 17 5 15 14 22 19 13 4 9 2 6 24 3 12 1 23 

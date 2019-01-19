@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.11.11.
-//
-
 #ifndef TRAVELINGSALESMAN_PARALLELSTACK_H
 #define TRAVELINGSALESMAN_PARALLELSTACK_H
 

@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.12.4.
-//
-
 #ifndef TRAVELINGSALESMAN_LINKEDSTACK_H
 #define TRAVELINGSALESMAN_LINKEDSTACK_H
 

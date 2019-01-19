@@ -1,2 +1,0 @@
-Provided thread support level: 2
-I am process 0 with 1 threads and have stack of size 1

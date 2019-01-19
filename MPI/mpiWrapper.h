@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.12.18.
-//
-
 #ifndef TRAVELINGSALESMAN_MPI_H
 #define TRAVELINGSALESMAN_MPI_H
 

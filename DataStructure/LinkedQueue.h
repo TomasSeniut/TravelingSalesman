@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.12.16.
-//
-
 #ifndef TRAVELINGSALESMAN_LINKEDQUEUE_H
 #define TRAVELINGSALESMAN_LINKEDQUEUE_H
 

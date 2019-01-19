@@ -1,6 +1,0 @@
-Provided thread support level: 2
-I am process 0 with 1 threads and have stack of size 1
-slurmstepd-lxibm028: error: Job 831358 exceeded memory limit (8207912 > 8192000), being killed
-slurmstepd-lxibm028: error: *** JOB 831358 ON lxibm028 CANCELLED AT 2019-01-15T00:30:51 ***
-slurmstepd-lxibm028: error: Exceeded step memory limit at some point.
-slurmstepd-lxibm028: error: Exceeded job memory limit

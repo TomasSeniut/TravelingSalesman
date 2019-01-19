@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.9.30.
-//
-
 #ifndef TRAVELINGSALESMAN_UTILS_H
 #define TRAVELINGSALESMAN_UTILS_H
 

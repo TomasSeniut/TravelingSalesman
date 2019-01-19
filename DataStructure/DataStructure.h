@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.9.30.
-//
-
 #ifndef TRAVELINGSALESMAN_DATASTRUCTURE_H
 #define TRAVELINGSALESMAN_DATASTRUCTURE_H
 

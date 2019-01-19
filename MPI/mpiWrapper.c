@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.12.18.
-//
-
 #include "../DataStructure/DataStructure.h"
 #include "mpiWrapper.h"
 #include <mpi.h>

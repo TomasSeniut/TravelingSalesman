@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.11.10.
-//
-
 #include <stdio.h>
 #include <float.h>
 #include <omp.h>

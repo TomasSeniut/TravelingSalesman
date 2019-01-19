@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.12.13.
-//
-
 #include <stdio.h>
 #include <float.h>
 #include <omp.h>
@@ -34,7 +30,7 @@ stack_data hybridBranchAndBound(tsp_global params, stack_data bestKnown) {
     initQueue();
     enQueue(initialProblem);
 
-    while (queueSize() < omp_get_max_threads() * size) {
+    while (queueSize() < 10 * omp_get_max_threads() * size) {
         stack_data problem = deQueue();
 
         for (int i = 0; i < params.cities; ++i) {

@@ -1,7 +1,3 @@
-//
-// Created by tomas on 18.9.30.
-//
-
 #include <math.h>
 #include <stdlib.h>
 #include "DataStructure/DataStructure.h"
