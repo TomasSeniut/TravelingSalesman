@@ -1,6 +1,8 @@
 #ifndef TRAVELINGSALESMAN_MPI_H
 #define TRAVELINGSALESMAN_MPI_H
 
+#include "../DataStructure/DataStructure.h"
+
 enum { MPI_PROBLEM_TAG = 11, MPI_BOUND_TAG = 22 };
 
 void MPI_Wrapper_Init(int problemSize, int *size, int *rank);

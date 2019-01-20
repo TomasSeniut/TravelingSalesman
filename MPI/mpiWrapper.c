@@ -1,4 +1,3 @@
-#include "../DataStructure/DataStructure.h"
 #include "mpiWrapper.h"
 #include <mpi.h>
 #include <stdlib.h>

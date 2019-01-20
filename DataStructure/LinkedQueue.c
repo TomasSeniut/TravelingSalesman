@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "DataStructure.h"
+#include "LinkedQueue.h"
 
 typedef struct {
     stack_node *front;
